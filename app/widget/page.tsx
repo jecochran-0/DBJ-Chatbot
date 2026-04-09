@@ -104,6 +104,7 @@ export default function Widget() {
   return (
     <div style={S.root}>
       <style>{css}</style>
+<style>{`html, body { background: transparent !important; }`}</style>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
 
       {open && (
