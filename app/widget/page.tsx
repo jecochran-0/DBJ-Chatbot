@@ -217,29 +217,31 @@ export default function Widget() {
 
       {/* Proactive greeting */}
       {showGreeting && !open && (
-        <>
-          <div className="cb-greeting-wrap">
-            <div className="cb-greeting-bubble">
-              <div onClick={openChat} style={{cursor:"pointer"}}>
-                <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:6}}>
-                  <div style={{width:22,height:22,borderRadius:6,background:CONFIG.primaryColor,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 3-1.5 5-3.5 7L12 22l-3.5-6C6.5 14 5 12 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2"/></svg>
-                  </div>
-                  <span style={{fontSize:12,fontWeight:600,color:"#333"}}>{CONFIG.name}</span>
-                </div>
-                <p style={{fontSize:13.5,color:"#444",margin:0,lineHeight:"1.45",paddingRight:20}}>{CONFIG.greetingMessage}</p>
-              </div>
+        <div
+          className="cb-greeting-wrap"
+          onMouseDown={(e) => {
+            const target = e.target as HTMLElement;
+            if (target.closest('[data-dismiss]')) {
+              dismissGreeting();
+            } else {
+              openChat();
+            }
+          }}
+        >
+          <div className="cb-greeting-bubble">
+            <div data-dismiss="true" className="cb-greeting-x">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </div>
-            <div className="cb-greeting-tail"/>
+            <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:6}}>
+              <div style={{width:22,height:22,borderRadius:6,background:CONFIG.primaryColor,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 3-1.5 5-3.5 7L12 22l-3.5-6C6.5 14 5 12 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2"/></svg>
+              </div>
+              <span style={{fontSize:12,fontWeight:600,color:"#333"}}>{CONFIG.name}</span>
+            </div>
+            <p style={{fontSize:13.5,color:"#444",margin:0,lineHeight:"1.45",paddingRight:24}}>{CONFIG.greetingMessage}</p>
           </div>
-          <button
-            className="cb-greeting-x"
-            onPointerDown={(e) => { e.stopPropagation(); e.preventDefault(); dismissGreeting(); }}
-            aria-label="Dismiss"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          </button>
-        </>
+          <div className="cb-greeting-tail"/>
+        </div>
       )}
 
       {/* FAB */}
@@ -497,25 +499,26 @@ html, body {
   min-width: 200px;
   position: relative;
   border: 1px solid #e2e6eb;
+  cursor: pointer;
 }
 .cb-greeting-x {
-  position: fixed;
-  bottom: 152px;
-  right: 28px;
-  background: #fff;
-  border: 1px solid #ddd;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #f4f4f4;
   cursor: pointer;
-  padding: 6px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  z-index: 100000;
-  box-shadow: 0 2px 8px rgba(0,0,0,.12);
-  transition: background .15s;
+  border: none;
+  z-index: 10;
 }
 .cb-greeting-x:hover {
-  background: #f0f0f0;
+  background: #e0e0e0;
 }
 .cb-greeting-tail {
   width: 14px;
@@ -534,10 +537,6 @@ html, body {
   .cb-greeting-wrap {
     right: 16px;
     bottom: 92px;
-  }
-  .cb-greeting-x {
-    right: 20px;
-    bottom: 148px;
   }
   .cb-fab {
     bottom: 20px;
