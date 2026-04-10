@@ -219,18 +219,24 @@ export default function Widget() {
       {showGreeting && !open && (
         <>
           <div className="cb-greeting-wrap">
-            <div className="cb-greeting-bubble" onClick={openChat}>
-              <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:6}}>
-                <div style={{width:22,height:22,borderRadius:6,background:CONFIG.primaryColor,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 3-1.5 5-3.5 7L12 22l-3.5-6C6.5 14 5 12 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2"/></svg>
+            <div className="cb-greeting-bubble">
+              <div onClick={openChat} style={{cursor:"pointer"}}>
+                <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:6}}>
+                  <div style={{width:22,height:22,borderRadius:6,background:CONFIG.primaryColor,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 3-1.5 5-3.5 7L12 22l-3.5-6C6.5 14 5 12 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2"/></svg>
+                  </div>
+                  <span style={{fontSize:12,fontWeight:600,color:"#333"}}>{CONFIG.name}</span>
                 </div>
-                <span style={{fontSize:12,fontWeight:600,color:"#333"}}>{CONFIG.name}</span>
+                <p style={{fontSize:13.5,color:"#444",margin:0,lineHeight:"1.45",paddingRight:20}}>{CONFIG.greetingMessage}</p>
               </div>
-              <p style={{fontSize:13.5,color:"#444",margin:0,lineHeight:"1.45",paddingRight:20}}>{CONFIG.greetingMessage}</p>
             </div>
             <div className="cb-greeting-tail"/>
           </div>
-          <button className="cb-greeting-x" onClick={dismissGreeting} aria-label="Dismiss">
+          <button
+            className="cb-greeting-x"
+            onPointerDown={(e) => { e.stopPropagation(); e.preventDefault(); dismissGreeting(); }}
+            aria-label="Dismiss"
+          >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </>
@@ -238,8 +244,8 @@ export default function Widget() {
 
       {/* FAB */}
       <button onClick={toggleChat} className={`cb-fab ${open ? "cb-fab-hidden" : ""}`} aria-label="Chat">
-        {showGreeting && !open && <span className="cb-fab-badge"/>}
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        {showGreeting && !open && <span className="cb-fab-badge"/>}
       </button>
     </>
   );
@@ -472,14 +478,13 @@ html, body {
   background: #ef4444;
   border: 2px solid #fff;
   animation: cbBadgePulse 2s ease-in-out infinite;
-  z-index: 1;
+  z-index: 2;
 }
 
 .cb-greeting-wrap {
   position: fixed;
   bottom: 96px;
   right: 24px;
-  cursor: pointer;
   animation: cbGreetIn .4s cubic-bezier(.16,1,.3,1);
   z-index: 99999;
 }
