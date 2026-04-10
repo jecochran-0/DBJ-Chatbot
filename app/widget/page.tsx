@@ -64,7 +64,6 @@ export default function Widget() {
   useEffect(() => { scroll(); }, [msgs, typing, scroll]);
   useEffect(() => { if (open && inputRef.current) inputRef.current.focus(); }, [open]);
 
-  // Proactive greeting timer
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!open && !greetingDismissed) {
@@ -85,11 +84,7 @@ export default function Widget() {
   };
 
   const toggleChat = () => {
-    if (open) {
-      closeChat();
-    } else {
-      openChat();
-    }
+    if (open) { closeChat(); } else { openChat(); }
   };
 
   const dismissGreeting = () => {
@@ -153,7 +148,6 @@ export default function Widget() {
       {/* Chat window */}
       {open && (
         <div className="cb-window">
-          {/* Header */}
           <div className="cb-header">
             <div style={{display:"flex",alignItems:"center",gap:12}}>
               <div style={{width:38,height:38,borderRadius:12,background:"rgba(255,255,255,.18)",display:"flex",alignItems:"center",justifyContent:"center"}}>
@@ -172,7 +166,6 @@ export default function Widget() {
             </button>
           </div>
 
-          {/* Body */}
           <div className="cb-body" ref={bodyRef}>
             <div style={{textAlign:"center",padding:"8px 12px 14px"}}>
               <p style={{fontSize:16,fontWeight:600,margin:"0 0 4px",color:"#1a1d21"}}>Hi! How can we help you today?</p>
@@ -192,16 +185,13 @@ export default function Widget() {
             {msgs.map((m,i) => (
               <div key={i} style={{display:"flex",alignItems:"flex-end",gap:8,justifyContent:m.role==="user"?"flex-end":"flex-start",animation:"cbFade .25s ease"}}>
                 {m.role==="assistant" && <Avatar/>}
-                <div className={m.role==="user"?"cb-bubble-user":"cb-bubble-bot"}>
-                  {m.text}
-                </div>
+                <div className={m.role==="user"?"cb-bubble-user":"cb-bubble-bot"}>{m.text}</div>
               </div>
             ))}
 
             {typing && <Typing/>}
           </div>
 
-          {/* Handoff */}
           <div className="cb-handoff">
             <button className="cb-handoff-btn">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -209,7 +199,6 @@ export default function Widget() {
             </button>
           </div>
 
-          {/* Input */}
           <div className="cb-input-area">
             <input
               ref={inputRef}
@@ -228,28 +217,26 @@ export default function Widget() {
 
       {/* Proactive greeting */}
       {showGreeting && !open && (
-        <div className="cb-greeting-wrap" onClick={openChat}>
-          <div className="cb-greeting-bubble">
-            <button
-              className="cb-greeting-x"
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); dismissGreeting(); }}
-              aria-label="Dismiss"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
-            <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:6}}>
-              <div style={{width:22,height:22,borderRadius:6,background:CONFIG.primaryColor,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 3-1.5 5-3.5 7L12 22l-3.5-6C6.5 14 5 12 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2"/></svg>
+        <>
+          <div className="cb-greeting-wrap">
+            <div className="cb-greeting-bubble" onClick={openChat}>
+              <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:6}}>
+                <div style={{width:22,height:22,borderRadius:6,background:CONFIG.primaryColor,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 3-1.5 5-3.5 7L12 22l-3.5-6C6.5 14 5 12 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2"/></svg>
+                </div>
+                <span style={{fontSize:12,fontWeight:600,color:"#333"}}>{CONFIG.name}</span>
               </div>
-              <span style={{fontSize:12,fontWeight:600,color:"#333"}}>{CONFIG.name}</span>
+              <p style={{fontSize:13.5,color:"#444",margin:0,lineHeight:"1.45",paddingRight:20}}>{CONFIG.greetingMessage}</p>
             </div>
-            <p style={{fontSize:13.5,color:"#444",margin:0,lineHeight:"1.45"}}>{CONFIG.greetingMessage}</p>
+            <div className="cb-greeting-tail"/>
           </div>
-          <div className="cb-greeting-tail"/>
-        </div>
+          <button className="cb-greeting-x" onClick={dismissGreeting} aria-label="Dismiss">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </>
       )}
 
-      {/* FAB — always visible, toggles chat */}
+      {/* FAB */}
       <button onClick={toggleChat} className={`cb-fab ${open ? "cb-fab-hidden" : ""}`} aria-label="Chat">
         {showGreeting && !open && <span className="cb-fab-badge"/>}
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -275,7 +262,6 @@ html, body {
 @keyframes cbGreetIn { from { opacity: 0; transform: translateY(8px) scale(.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes cbBadgePulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
 
-/* ---- Chat window ---- */
 .cb-window {
   position: fixed;
   bottom: 96px;
@@ -295,7 +281,6 @@ html, body {
   z-index: 99998;
 }
 
-/* ---- Mobile: full screen ---- */
 @media (max-width: 500px) {
   .cb-window {
     bottom: 0 !important;
@@ -455,7 +440,6 @@ html, body {
   transition: opacity .15s;
 }
 
-/* ---- FAB ---- */
 .cb-fab {
   position: fixed;
   bottom: 24px;
@@ -480,17 +464,17 @@ html, body {
 }
 .cb-fab-badge {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -2px;
+  right: -2px;
   width: 14px;
   height: 14px;
   border-radius: 50%;
   background: #ef4444;
   border: 2px solid #fff;
   animation: cbBadgePulse 2s ease-in-out infinite;
+  z-index: 1;
 }
 
-/* ---- Proactive greeting ---- */
 .cb-greeting-wrap {
   position: fixed;
   bottom: 96px;
@@ -502,7 +486,7 @@ html, body {
 .cb-greeting-bubble {
   background: #fff;
   border-radius: 16px;
-  padding: 12px 40px 12px 14px;
+  padding: 12px 14px;
   box-shadow: 0 6px 24px rgba(0,0,0,.12), 0 1px 4px rgba(0,0,0,.06);
   max-width: 280px;
   min-width: 200px;
@@ -510,22 +494,23 @@ html, body {
   border: 1px solid #e2e6eb;
 }
 .cb-greeting-x {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  background: #f4f4f4;
-  border: none;
+  position: fixed;
+  bottom: 152px;
+  right: 28px;
+  background: #fff;
+  border: 1px solid #ddd;
   cursor: pointer;
   padding: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  z-index: 10;
+  z-index: 100000;
+  box-shadow: 0 2px 8px rgba(0,0,0,.12);
   transition: background .15s;
 }
 .cb-greeting-x:hover {
-  background: #e0e0e0;
+  background: #f0f0f0;
 }
 .cb-greeting-tail {
   width: 14px;
@@ -544,6 +529,10 @@ html, body {
   .cb-greeting-wrap {
     right: 16px;
     bottom: 92px;
+  }
+  .cb-greeting-x {
+    right: 20px;
+    bottom: 148px;
   }
   .cb-fab {
     bottom: 20px;
