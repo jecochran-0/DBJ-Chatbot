@@ -7,7 +7,7 @@ const CONFIG = {
   name: "Bright Smile Dental",
   primaryColor: "#1a5c6b",
   greetingDelay: 15000,
-  greetingMessage: "Looking for a new dentist? I can help you find the right fit \u{1F60A}",
+  greetingMessage: "Looking for a new dentist? I can help you find the right fit.",
  quickReplies: [
     { label: "Book appointment", icon: "calendar", msg: "I'd like to book an appointment" },
     { label: "Insurance questions", icon: "shield", msg: "What insurance do you accept?" },
@@ -80,11 +80,6 @@ export default function Widget() {
     if (open) setShowGreeting(false);
   }, [open]);
 
-  const dismissGreeting = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setShowGreeting(false);
-    setGreetingDismissed(true);
-  };
 
   const send = async (text: string) => {
     setShowInit(false);
@@ -215,8 +210,7 @@ export default function Widget() {
           onClick={() => { setShowGreeting(false); setGreetingDismissed(true); setOpen(true); }}
         >
           <div style={S.greetingBubble}>
-            <button onClick={dismissGreeting} style={S.greetingClose} aria-label="Dismiss">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+<button onMouseDown={(e)=>{e.stopPropagation();setShowGreeting(false);setGreetingDismissed(true)}} style={S.greetingClose} aria-label="Dismiss">              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
             <div style={S.greetingHeader}>
               <div style={S.greetingAvatar}>
@@ -265,7 +259,7 @@ const S: Record<string, React.CSSProperties> = {
   // Proactive greeting
   greetingWrap:{position:"absolute" as const,bottom:76,right:0,cursor:"pointer",animation:"cbGreetIn .4s cubic-bezier(.16,1,.3,1)"},
   greetingBubble:{background:"#fff",borderRadius:16,padding:"12px 36px 12px 14px",boxShadow:"0 6px 24px rgba(0,0,0,.12),0 1px 4px rgba(0,0,0,.06)",maxWidth:280,minWidth:200,position:"relative" as const,border:"1px solid #e2e6eb"},
-  greetingClose:{position:"absolute" as const,top:8,right:8,background:"none",border:"none",cursor:"pointer",padding:2,display:"flex",borderRadius:4},
+  greetingClose:{position:"absolute" as const,top:4,right:4,background:"none",border:"none",cursor:"pointer",padding:8,display:"flex",borderRadius:8,zIndex:10},
   greetingHeader:{display:"flex",alignItems:"center",gap:7,marginBottom:6},
   greetingAvatar:{width:22,height:22,borderRadius:6,background:CONFIG.primaryColor,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0},
   greetingName:{fontSize:12,fontWeight:600,color:"#333"},
