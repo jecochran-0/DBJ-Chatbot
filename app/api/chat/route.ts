@@ -24,17 +24,27 @@ async function getKnowledge(practiceId: string) {
   return data || [];
 }
 
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
+export async function OPTIONS() {
+  return new Response(null, { headers: CORS_HEADERS });
+}
+
 export async function POST(request: Request) {
   try {
     const { messages, practiceId } = await request.json();
 
     if (!messages?.length || !practiceId) {
-      return Response.json({ error: "Missing messages or practiceId" }, { status: 400 });
+      return Response.json({ error: "Missing messages or practiceId" }, { status: 400, headers: CORS_HEADERS });
     }
 
     const practice = await getPractice(practiceId);
     if (!practice) {
-      return Response.json({ error: "Practice not found" }, { status: 404 });
+      return Response.json({ error: "Practice not found" }, { status: 404, headers: CORS_HEADERS });
     }
 
     const knowledge = await getKnowledge(practiceId);
@@ -100,10 +110,10 @@ ${practice.system_prompt_overrides || ""}`;
     });
 
     return new Response(readable, {
-      headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache", Connection: "keep-alive" },
+      headers: { ...CORS_HEADERS, "Content-Type": "text/event-stream", "Cache-Control": "no-cache", Connection: "keep-alive" },
     });
   } catch (err) {
     console.error("Chat API error:", err);
-    return Response.json({ error: "Internal server error" }, { status: 500 });
+    return Response.json({ error: "Internal server error" }, { status: 500, headers: CORS_HEADERS });
   }
 }
