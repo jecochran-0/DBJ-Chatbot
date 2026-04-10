@@ -8,11 +8,11 @@ const CONFIG = {
   primaryColor: "#1a5c6b",
   greetingDelay: 15000,
   greetingMessage: "Looking for a new dentist? I can help you find the right fit \u{1F60A}",
-  quickReplies: [
-    { label: "Book appointment", icon: "\u{1F4C5}", msg: "I'd like to book an appointment" },
-    { label: "Insurance questions", icon: "\u{1F6E1}\uFE0F", msg: "What insurance do you accept?" },
-    { label: "I have a toothache", icon: "\u{1F9B7}", msg: "I have a toothache and need help" },
-    { label: "Hours & location", icon: "\u{1F4CD}", msg: "What are your hours and location?" },
+ quickReplies: [
+    { label: "Book appointment", icon: "calendar", msg: "I'd like to book an appointment" },
+    { label: "Insurance questions", icon: "shield", msg: "What insurance do you accept?" },
+    { label: "I have a toothache", icon: "alert", msg: "I have a toothache and need help" },
+    { label: "Hours & location", icon: "pin", msg: "What are your hours and location?" },
   ],
 };
 
@@ -35,6 +35,16 @@ function Typing() {
       </div>
     </div>
   );
+}
+
+function ChipIcon({ name }: { name: string }) {
+  const s = { width: 16, height: 16, flexShrink: 0 } as const;
+  const p = { fill: "none", stroke: "#555", strokeWidth: "2", strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  if (name === "calendar") return <svg {...s} viewBox="0 0 24 24" {...p}><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>;
+  if (name === "shield") return <svg {...s} viewBox="0 0 24 24" {...p}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>;
+  if (name === "alert") return <svg {...s} viewBox="0 0 24 24" {...p}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>;
+  if (name === "pin") return <svg {...s} viewBox="0 0 24 24" {...p}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>;
+  return null;
 }
 
 export default function Widget() {
@@ -160,7 +170,7 @@ export default function Widget() {
               <div style={{display:"flex",flexWrap:"wrap" as const,gap:7,padding:"6px 0"}}>
                 {CONFIG.quickReplies.map((r,i) => (
                   <button key={i} onClick={()=>send(r.msg)} style={S.chip}>
-                    <span style={{fontSize:14}}>{r.icon}</span> {r.label}
+                    <ChipIcon name={r.icon}/> {r.label}
                   </button>
                 ))}
               </div>
